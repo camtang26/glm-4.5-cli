@@ -1,8 +1,8 @@
 {
   "current_issue": null,
-  "compaction_count": 1,
+  "compaction_count": 2,
   "project_name": "glm-4.5-cli-clean",
-  "last_compact": "2025-07-31T14:12:12.582357",
+  "last_compact": "2025-07-31T14:35:22.257005",
   "files_modified": [],
   "key_decisions": []
 }

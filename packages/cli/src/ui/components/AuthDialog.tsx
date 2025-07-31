@@ -45,7 +45,13 @@ export function AuthDialog({
     initialErrorMessage || null,
   );
   const [showOpenAIKeyPrompt, setShowOpenAIKeyPrompt] = useState(false);
-  const items = [{ label: 'OpenAI', value: AuthType.USE_OPENAI }];
+  const items = [
+    { label: 'GLM-4.5', value: AuthType.USE_GLM },
+    { label: 'OpenAI', value: AuthType.USE_OPENAI },
+    { label: 'Google API Key', value: AuthType.USE_GEMINI },
+    { label: 'Vertex AI', value: AuthType.USE_VERTEX_AI },
+    { label: 'Login with Google', value: AuthType.LOGIN_WITH_GOOGLE },
+  ];
 
   const initialAuthIndex = Math.max(
     0,
@@ -59,6 +65,10 @@ export function AuthDialog({
       );
       if (defaultAuthType) {
         return item.value === defaultAuthType;
+      }
+
+      if (process.env.GLM_API_KEY) {
+        return item.value === AuthType.USE_GLM;
       }
 
       if (process.env.GEMINI_API_KEY) {

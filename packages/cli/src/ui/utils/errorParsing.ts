@@ -93,6 +93,10 @@ function getRateLimitMessage(
       return RATE_LIMIT_ERROR_MESSAGE_USE_GEMINI;
     case AuthType.USE_VERTEX_AI:
       return RATE_LIMIT_ERROR_MESSAGE_VERTEX;
+    case AuthType.USE_OPENAI:
+      return 'You have exceeded your OpenAI API rate limit. Please check your OpenAI account or wait before retrying.';
+    case AuthType.USE_GLM:
+      return 'You have exceeded your GLM-4.5 API rate limit. Please check your GLM account balance or wait before retrying. Common causes: insufficient balance (402 error) or rate limit exceeded (429 error).';
     default:
       return getRateLimitErrorMessageDefault(fallbackModel);
   }

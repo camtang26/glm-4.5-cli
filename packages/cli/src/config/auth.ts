@@ -45,6 +45,13 @@ export const validateAuthMethod = (authMethod: string): string | null => {
     return null;
   }
 
+  if (authMethod === AuthType.USE_GLM) {
+    if (!process.env.GLM_API_KEY) {
+      return 'GLM_API_KEY environment variable not found. Add that to your environment and try again (no reload needed if using .env)!';
+    }
+    return null;
+  }
+
   return 'Invalid auth method selected.';
 };
 
@@ -58,4 +65,16 @@ export const setOpenAIBaseUrl = (baseUrl: string): void => {
 
 export const setOpenAIModel = (model: string): void => {
   process.env.OPENAI_MODEL = model;
+};
+
+export const setGLMApiKey = (apiKey: string): void => {
+  process.env.GLM_API_KEY = apiKey;
+};
+
+export const setGLMBaseUrl = (baseUrl: string): void => {
+  process.env.GLM_BASE_URL = baseUrl;
+};
+
+export const setGLMModel = (model: string): void => {
+  process.env.GLM_MODEL = model;
 };
