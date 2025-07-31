@@ -180,6 +180,18 @@ export class OpenAIContentGenerator implements ContentGenerator {
         ...samplingParams,
       };
 
+      // Enable thinking mode for GLM models
+      if (this.model.startsWith('glm-')) {
+        (createParams as any).extra_body = {
+          thinking: { 
+            type: process.env.GLM_THINKING_MODE === 'disabled' ? 'disabled' : 'enabled' 
+          },
+          chat_template_kwargs: { 
+            enable_thinking: process.env.GLM_THINKING_MODE !== 'disabled' 
+          }
+        };
+      }
+
       if (request.config?.tools) {
         createParams.tools = await this.convertGeminiToolsToOpenAI(
           request.config.tools,
@@ -305,6 +317,18 @@ export class OpenAIContentGenerator implements ContentGenerator {
         stream: true,
         stream_options: { include_usage: true },
       };
+
+      // Enable thinking mode for GLM models
+      if (this.model.startsWith('glm-')) {
+        (createParams as any).extra_body = {
+          thinking: { 
+            type: process.env.GLM_THINKING_MODE === 'disabled' ? 'disabled' : 'enabled' 
+          },
+          chat_template_kwargs: { 
+            enable_thinking: process.env.GLM_THINKING_MODE !== 'disabled' 
+          }
+        };
+      }
 
       if (request.config?.tools) {
         createParams.tools = await this.convertGeminiToolsToOpenAI(
