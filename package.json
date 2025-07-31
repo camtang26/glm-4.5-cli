@@ -1,6 +1,7 @@
 {
-  "name": "@qwen-code/qwen-code",
-  "version": "0.0.1-alpha.8",
+  "name": "@glm-cli/glm-4.5-cli",
+  "version": "1.0.0",
+  "description": "A powerful command-line AI workflow tool for GLM-4.5 models. Forked from Qwen-code with enhanced support for Zhipu AI's GLM-4.5 and GLM-4.5-Air models.",
   "engines": {
     "node": ">=20"
   },
@@ -10,7 +11,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+http://gitlab.alibaba-inc.com/Qwen-Coder/qwen-code.git"
+    "url": "git+https://github.com/camtang26/glm-4.5-cli.git"
   },
   "config": {
     "sandboxImageUri": "us-docker.pkg.dev/gemini-code-dev/gemini-cli/sandbox:0.0.1-alpha.8"
@@ -48,7 +49,7 @@
     "clean": "node scripts/clean.js"
   },
   "bin": {
-    "qwen": "bundle/gemini.js"
+    "glm": "bundle/gemini.js"
   },
   "files": [
     "bundle/",
@@ -82,7 +83,21 @@
     "vitest": "^3.2.4",
     "yargs": "^18.0.0"
   },
-  "dependencies": {
-    "@qwen-code/qwen-code": "^0.0.1-alpha.8"
-  }
+  "keywords": [
+    "glm",
+    "glm-4.5",
+    "glm-4.5-air",
+    "ai",
+    "cli",
+    "zhipu",
+    "openai-compatible",
+    "coding-assistant",
+    "tool-calling"
+  ],
+  "author": "Cameron Tang",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/camtang26/glm-4.5-cli/issues"
+  },
+  "homepage": "https://github.com/camtang26/glm-4.5-cli#readme"
 }

@@ -44,6 +44,7 @@ export enum AuthType {
   USE_VERTEX_AI = 'vertex-ai',
   CLOUD_SHELL = 'cloud-shell',
   USE_OPENAI = 'openai',
+  USE_GLM = 'glm',
 }
 
 export type ContentGeneratorConfig = {
@@ -76,6 +77,7 @@ export async function createContentGeneratorConfig(
   const googleCloudProject = process.env.GOOGLE_CLOUD_PROJECT || undefined;
   const googleCloudLocation = process.env.GOOGLE_CLOUD_LOCATION || undefined;
   const openaiApiKey = process.env.OPENAI_API_KEY;
+  const glmApiKey = process.env.GLM_API_KEY;
 
   // Use runtime model from config if available, otherwise fallback to parameter or default
   const effectiveModel = model || DEFAULT_GEMINI_MODEL;
@@ -118,6 +120,14 @@ export async function createContentGeneratorConfig(
     contentGeneratorConfig.apiKey = openaiApiKey;
     contentGeneratorConfig.model =
       process.env.OPENAI_MODEL || DEFAULT_GEMINI_MODEL;
+
+    return contentGeneratorConfig;
+  }
+
+  if (authType === AuthType.USE_GLM && glmApiKey) {
+    contentGeneratorConfig.apiKey = glmApiKey;
+    contentGeneratorConfig.model =
+      process.env.GLM_MODEL || 'glm-4.5';
 
     return contentGeneratorConfig;
   }
@@ -173,6 +183,19 @@ export async function createContentGenerator(
 
     // Always use OpenAIContentGenerator, logging is controlled by enableOpenAILogging flag
     return new OpenAIContentGenerator(config.apiKey, config.model, gcConfig);
+  }
+
+  if (config.authType === AuthType.USE_GLM) {
+    if (!config.apiKey) {
+      throw new Error('GLM API key is required');
+    }
+
+    // Import GLMContentGenerator dynamically to avoid circular dependencies
+    const { GLMContentGenerator } = await import(
+      './glmContentGenerator.js'
+    );
+
+    return new GLMContentGenerator(config.apiKey, config.model, gcConfig);
   }
 
   throw new Error(

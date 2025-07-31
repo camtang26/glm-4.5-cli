@@ -1,52 +1,130 @@
-# Qwen Code
+# GLM-4.5 CLI
 
-![Qwen Code Screenshot](./docs/assets/qwen-screenshot.png)
+![GLM-4.5 CLI Banner](./docs/assets/glm-cli-banner.png)
 
-Qwen Code is a command-line AI workflow tool adapted from [**Gemini CLI**](https://github.com/google-gemini/gemini-cli) (Please refer to [this document](./README.gemini.md) for more details), optimized for [Qwen3-Coder](https://github.com/QwenLM/Qwen3-Coder) models with enhanced parser support & tool support.
+GLM-4.5 CLI is a powerful command-line AI workflow tool for [GLM-4.5](https://github.com/zai-org/GLM-4.5) models by Zhipu AI. This project is forked from [Qwen-code](https://github.com/QwenLM/qwen-code) (which itself is based on [Gemini CLI](https://github.com/google-gemini/gemini-cli)), and has been optimized specifically for GLM-4.5 models with enhanced tool calling support and thinking mode integration.
 
-> [!WARNING]
-> Qwen Code may issue multiple API calls per cycle, resulting in higher token usage, similar to Claude Code. We’re actively working to enhance API efficiency and improve the overall developer experience. ModelScope offers 2,000 free API calls if you are in China mainland. Please check [API config section](#api-configuration) for more details.
+## 🚀 Why GLM-4.5 CLI?
 
-## Key Features
+- **Superior Tool Calling**: 90.6% success rate - highest among open-source models
+- **OpenAI Compatible**: Drop-in replacement with full API compatibility
+- **Cost Effective**: Only $0.11/M input tokens, significantly cheaper than competitors
+- **Dual Models**: Choose between GLM-4.5 (355B) for maximum capability or GLM-4.5-Air (106B) for efficiency
+- **Thinking Mode**: Built-in reasoning mode for complex problem solving
+- **128K Context**: Handle large codebases and documents with ease
 
-- **Code Understanding & Editing** - Query and edit large codebases beyond traditional context window limits
-- **Workflow Automation** - Automate operational tasks like handling pull requests and complex rebases
-- **Enhanced Parser** - Adapted parser specifically optimized for Qwen-Coder models
+## 📊 Performance
 
-## Quick Start
+GLM-4.5 ranks **3rd globally** across 12 industry-standard benchmarks:
+- **Tool Calling**: 90.6% success rate (beats Claude 3.5 Sonnet's 89.5%)
+- **Code Generation**: >100 tokens/sec throughput
+- **Web Browsing**: Outperforms Claude-4-Opus by 8 points
+- **Native Functions**: Built-in Python interpreter for computations
+
+## 🚦 Quick Start
 
 ### Prerequisites
 
 Ensure you have [Node.js version 20](https://nodejs.org/en/download) or higher installed.
 
 ```bash
-curl -qL https://www.npmjs.com/install.sh | sh
+node --version  # Should be v20.0.0 or higher
 ```
 
 ### Installation
 
+#### From npm (Coming Soon)
 ```bash
-npm install -g @qwen-code/qwen-code@latest
-qwen --version
+npm install -g @glm-cli/glm-4.5-cli
+glm --version
 ```
 
-Then run from anywhere:
-
+#### From Source (Recommended for Now)
 ```bash
-qwen
-```
-
-Or you can install it from source:
-
-```bash
-git clone https://github.com/QwenLM/qwen-code.git
-cd qwen-code
+git clone https://github.com/camtang26/glm-4.5-cli.git
+cd glm-4.5-cli
 npm install
 npm install -g .
 ```
 
-We now support max session token limit, you can set it in your `.qwen/settings.json` file to save the token usage.
-For example, if you want to set the max session token limit to 32000, you can set it like this:
+### API Configuration
+
+1. **Get your API key**:
+   - **International**: [Z.ai Platform](https://platform.z.ai)
+   - **China Mainland**: [Zhipu AI Platform](https://open.bigmodel.cn)
+
+2. **Set up environment variables**:
+
+```bash
+# Required
+export GLM_API_KEY="your_api_key_here"
+
+# Optional (defaults shown)
+export GLM_BASE_URL="https://open.bigmodel.cn/api/paas/v4"
+export GLM_MODEL="glm-4.5"  # or "glm-4.5-air"
+export GLM_THINKING_MODE="enabled"  # or "disabled"
+```
+
+Alternatively, create a `.env` file in your project root:
+
+```env
+GLM_API_KEY=your_api_key_here
+GLM_MODEL=glm-4.5
+GLM_THINKING_MODE=enabled
+```
+
+## 💻 Usage Examples
+
+### Start Interactive Session
+
+```bash
+cd your-project/
+glm
+```
+
+### Explore Codebases
+
+```bash
+glm
+> Describe the main architecture of this codebase
+> Find all authentication implementations
+> What does the UserService class do?
+```
+
+### Code Generation & Editing
+
+```bash
+glm
+> Create a REST API endpoint for user management
+> Add error handling to all database operations
+> Refactor this function to use async/await
+```
+
+### Advanced Features
+
+#### Enable/Disable Thinking Mode
+```bash
+# Enable complex reasoning (default)
+export GLM_THINKING_MODE=enabled
+
+# Disable for faster responses
+export GLM_THINKING_MODE=disabled
+```
+
+#### Switch Models
+```bash
+# Use full GLM-4.5 model (355B parameters)
+export GLM_MODEL=glm-4.5
+
+# Use lightweight GLM-4.5-Air (106B parameters) 
+export GLM_MODEL=glm-4.5-air
+```
+
+## 🛠️ Configuration
+
+### Session Token Limits
+
+Configure max session tokens in `.glm/settings.json`:
 
 ```json
 {
@@ -54,126 +132,85 @@ For example, if you want to set the max session token limit to 32000, you can se
 }
 ```
 
-The max session means the maximum number of tokens that can be used in one chat (not the total usage during multiple tool call shoots); if you reach the limit, you can use the `/compress` command to compress the history and go on, or use `/clear` command to clear the history.
+When you reach the limit:
+- Use `/compress` to compress conversation history
+- Use `/clear` to start fresh
 
-### API Configuration
+### Alternative API Endpoints
 
-Set your Qwen API key (In Qwen Code project, you can also set your API key in `.env` file). the `.env` file should be placed in the root directory of your current project.
+#### OpenRouter
+```bash
+export GLM_BASE_URL="https://openrouter.ai/api/v1"
+export GLM_API_KEY="your_openrouter_key"
+```
 
-> ⚠️ **Notice:** <br>
-> **If you are in mainland China, please go to https://bailian.console.aliyun.com/ or https://modelscope.cn/docs/model-service/API-Inference/intro to apply for your API key** <br>
-> **If you are not in mainland China, please go to https://modelstudio.console.alibabacloud.com/ to apply for your API key**
+#### CometAPI
+```bash
+export GLM_BASE_URL="https://api.cometapi.com/v1"
+export GLM_API_KEY="your_comet_key"
+```
 
-If you are in mainland China, you can use Qwen3-Coder through the Alibaba Cloud bailian platform.
+## 📋 Available Commands
+
+| Command | Description |
+|---------|-------------|
+| `/help` | Show available commands |
+| `/clear` | Clear conversation history |
+| `/compress` | Compress history to save tokens |
+| `/exit` | Exit the CLI |
+| `/model` | Show or switch current model |
+| `/thinking` | Toggle thinking mode on/off |
+
+## 🔧 Advanced Configuration
+
+### Full Environment Variables
 
 ```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://dashscope.aliyuncs.com/compatible-mode/v1"
-export OPENAI_MODEL="qwen3-coder-plus"
+# Core settings
+GLM_API_KEY=your_api_key
+GLM_BASE_URL=https://open.bigmodel.cn/api/paas/v4
+GLM_MODEL=glm-4.5
+
+# Optional settings
+GLM_THINKING_MODE=enabled      # enabled/disabled
+GLM_TIMEOUT=120000             # Request timeout in ms
+GLM_MAX_TOKENS=4096            # Max output tokens
+GLM_TEMPERATURE=0.7            # 0.0-2.0
+GLM_TOP_P=0.95                 # 0.0-1.0
+GLM_LOG_ENABLED=false          # Enable debug logging
 ```
 
-If you are in mainland China, ModelScope offers 2,000 free model inference API calls per day:
+## 🎯 Key Features
 
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://api-inference.modelscope.cn/v1"
-export OPENAI_MODEL="Qwen/Qwen3-Coder-480B-A35B-Instruct"
-```
+- **🧠 Intelligent Code Understanding**: Navigate and understand large codebases beyond context limits
+- **⚡ Lightning Fast**: >100 tokens/sec generation speed
+- **🔧 Superior Tool Calling**: 90.6% success rate for function calls
+- **💡 Thinking Mode**: Built-in reasoning for complex problems
+- **🌐 Multi-Provider Support**: Works with Z.ai, OpenRouter, CometAPI
+- **💰 Cost Effective**: 5-10x cheaper than comparable models
+- **🔒 Secure**: API key authentication with no data retention
 
-If you are not in mainland China, you can use Qwen3-Coder through the Alibaba Cloud modelstuido platform.
+## 🤝 Contributing
 
-```bash
-export OPENAI_API_KEY="your_api_key_here"
-export OPENAI_BASE_URL="https://dashscope-intl.aliyuncs.com/compatible-mode/v1"
-export OPENAI_MODEL="qwen3-coder-plus"
-```
+We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
-## Usage Examples
+## 📜 License
 
-### Explore Codebases
+This project is licensed under the Apache 2.0 License - see the [LICENSE](LICENSE) file for details.
 
-```sh
-cd your-project/
-qwen
-> Describe the main pieces of this system's architecture
-```
+## 🙏 Acknowledgments
 
-### Code Development
+- [Zhipu AI](https://www.zhipuai.cn/) for creating GLM-4.5
+- [QwenLM](https://github.com/QwenLM) for the Qwen-code foundation
+- [Google Gemini](https://github.com/google-gemini) for the original Gemini CLI
 
-```sh
-> Refactor this function to improve readability and performance
-```
+## 🔗 Links
 
-### Automate Workflows
+- [GLM-4.5 Model](https://github.com/zai-org/GLM-4.5)
+- [API Documentation](https://docs.z.ai/guides/llm/glm-4.5)
+- [Issue Tracker](https://github.com/camtang26/glm-4.5-cli/issues)
+- [Qwen-code](https://github.com/QwenLM/qwen-code) (Original Fork)
 
-```sh
-> Analyze git commits from the last 7 days, grouped by feature and team member
-```
+---
 
-```sh
-> Convert all images in this directory to PNG format
-```
-
-## Popular Tasks
-
-### Understand New Codebases
-
-```text
-> What are the core business logic components?
-> What security mechanisms are in place?
-> How does the data flow work?
-```
-
-### Code Refactoring & Optimization
-
-```text
-> What parts of this module can be optimized?
-> Help me refactor this class to follow better design patterns
-> Add proper error handling and logging
-```
-
-### Documentation & Testing
-
-```text
-> Generate comprehensive JSDoc comments for this function
-> Write unit tests for this component
-> Create API documentation
-```
-
-## Benchmark Results
-
-### Terminal-Bench
-
-| Agent     | Model              | Accuracy |
-| --------- | ------------------ | -------- |
-| Qwen Code | Qwen3-Coder-480A35 | 37.5     |
-
-## Project Structure
-
-```
-qwen-code/
-├── packages/           # Core packages
-├── docs/              # Documentation
-├── examples/          # Example code
-└── tests/            # Test files
-```
-
-## Development & Contributing
-
-See [CONTRIBUTING.md](./CONTRIBUTING.md) to learn how to contribute to the project.
-
-## Troubleshooting
-
-If you encounter issues, check the [troubleshooting guide](docs/troubleshooting.md).
-
-## Acknowledgments
-
-This project is based on [Google Gemini CLI](https://github.com/google-gemini/gemini-cli). We acknowledge and appreciate the excellent work of the Gemini CLI team. Our main contribution focuses on parser-level adaptations to better support Qwen-Coder models.
-
-## License
-
-[LICENSE](./LICENSE)
-
-## Star History
-
-[![Star History Chart](https://api.star-history.com/svg?repos=QwenLM/qwen-code&type=Date)](https://www.star-history.com/#QwenLM/qwen-code&Date)
+Built with ❤️ for the GLM-4.5 community
